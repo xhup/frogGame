@@ -7,15 +7,16 @@ body {
 #mainCanvas {
     margin: 0;
     padding: 0;
-    border: 0;
+    border:2px solid #66A629;
 }
 
 #startBtn {
-    margin-top: -5px;
-    margin-left: 250px;
+    position: absolute;
+    top: 588px;
+    left: 0;
     background-color: #54C5BB;
     height: 80px;
-    width: 250px;
+    width: 784px;
     font-size: 30px;
 }
 
@@ -33,5 +34,5 @@ body {
     -webkit-border-radius: 35%;
     -moz-border-radius: 35%;
     border-radius: 35%;
-    opacity: 0.6;
+    opacity: 0.3;
 }
