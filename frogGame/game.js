@@ -15,7 +15,7 @@ var frogImage = new Image();
 frogImage.onload = function() {
     frogReady = true;
 };
-frogImage.src = "img/frog2.jpg";
+frogImage.src = "img/frog.png";
 
 //飞虫图片
 var wormReady = false;
@@ -23,7 +23,7 @@ var wormImage = new Image();
 wormImage.onload = function() {
     wormReady = true;
 };
-wormImage.src = "img/worm2.jpg";
+wormImage.src = "img/worm.png";
 
 //游戏中各个对象
 
@@ -78,13 +78,13 @@ var reset = function() {
     ctx.beginPath(); //为了清除上一次青蛙的舌头绘制线段，必须加这一句
 
     frog.x = canvas.width / 2 - 30; //青蛙的起始坐标
-    frog.y = canvas.height - 30;
+    frog.y = canvas.height + 2 - 30;
 
     frogTongue.x = frog.x + 15; //青蛙舌头的起始坐标
     frogTongue.y = canvas.height - 30;
 
-    worm.x = Math.random() * (canvas.width - 50); //飞虫的随机坐标
-    worm.y = Math.random() * (canvas.height - 100);
+    worm.x = Math.random() * (canvas.width - 35); //飞虫的随机坐标
+    worm.y = Math.random() * (canvas.height - 80);
 
     delete keysDown[37]; //删除上一次游戏可能存储的左右按键状态，避免对重新开始造成影响
     delete keysDown[39];
@@ -111,7 +111,7 @@ var update = function() {
 
     //用户按的是upBar键(↑)
     if (38 in keysDown) {
-        if (frogTongue.y > 0) { //避免舌头移出画布上边界
+        if (frogTongue.y > 2) { //避免舌头移出画布上边界
             frogTongue.y -= frogTongue.speed;
 
             keysDown[37] = null; //禁止此时左右移动按键生效
@@ -122,7 +122,7 @@ var update = function() {
 
     if (keysDown.upBar) { //当抬起↑键时
         //当青蛙舌头捕获到飞虫时，得分增加
-        if ((frogTongue.x >= worm.x) && (frogTongue.x <= worm.x + 30) && (frogTongue.y>worm.y) && (frogTongue.y <= worm.y + 33)) {
+        if ((frogTongue.x >= worm.x) && (frogTongue.x <= worm.x + 30+1) && (frogTongue.y >= worm.y) && (frogTongue.y <= worm.y + 33 + 2-1)) {//30和33是飞虫的像素宽高，2是画布上边框，1是根据实际效果的修正值
             game.score++;
             game.flag = 1; //捕虫成功标志
 
@@ -133,7 +133,7 @@ var update = function() {
     }
 }
 
-//渲染动画中的所有物体
+//渲染动画中的所有物体  
 var render = function() {
         if (bgReady) { //加载背景图片
             ctx.drawImage(bgImage, 0, 0);
@@ -159,12 +159,9 @@ function drowTongue() {
         ctx.beginPath();
         ctx.lineWidth = 5;
         ctx.strokeStyle = "red";
-        var tempX = frogTongue.x;
-        var tempy = canvas.height - 30;
-        ctx.moveTo(frogTongue.x, tempy);
-        console.log(frogTongue.x, frogTongue.y);
-        console.log(worm.x, worm.y);
-        ctx.lineTo(frogTongue.x, frogTongue.y - 10);
+        var initY = canvas.height + 2 - 30;
+        ctx.moveTo(frogTongue.x, initY);
+        ctx.lineTo(frogTongue.x, frogTongue.y );
         keysDown.upBar = false; //重置↑键状态
     }
     ctx.stroke();
@@ -176,6 +173,7 @@ function drowScore() {
     ctx.font = "24px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
+    ctx.textAlpha=0.5;
     ctx.fillText("Score: " + game.score, 20, 20);
 }
 
